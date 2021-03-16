@@ -32,7 +32,7 @@ namespace ServiceDesk.Infrastructure.Persistence
         }
 
         public DbSet<TodoItem> TodoItems { get; set; }
-
+        public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TodoList> TodoLists { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

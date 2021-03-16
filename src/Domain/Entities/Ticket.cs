@@ -8,5 +8,14 @@ namespace ServiceDesk.Domain.Entities
         public Guid Id { get; set; }
         public string Description { get; set; }
         public string Issue { get; set; }
+
+        public static Ticket Create(string description, string issue)
+        {
+            return new Ticket
+            {
+                Description = description,
+                Issue = issue
+            };
+        }
     }
 }
