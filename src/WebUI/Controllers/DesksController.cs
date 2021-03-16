@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ServiceDesk.Application.Desks.Commands;
+using ServiceDesk.Application.Desks.Queries.SingleDesk;
 
 namespace ServiceDesk.WebUI.Controllers
 {
@@ -14,10 +15,10 @@ namespace ServiceDesk.WebUI.Controllers
             throw new NotImplementedException();
         }
 
-        [HttpGet("{id}")]
-        public Task<ActionResult> GetDesk()
+        [HttpGet("{slug}")]
+        public async Task<ActionResult<SingleDeskVm>> GetDesk(string slug)
         {
-            throw new NotImplementedException();
+            return await Mediator.Send(new SingleDeskQuery {Slug = slug});
         }
 
         [HttpPost]
