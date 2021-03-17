@@ -9,11 +9,11 @@ namespace ServiceDesk.WebUI.Controllers
     
     public class TicketsController : ApiControllerBase
     {
-        [HttpGet]
-        public Task<ActionResult> ListDeskTickets(string slug)
-        {
-            throw new NotImplementedException();
-        }
+        // [HttpGet]
+        // public Task<ActionResult> ListDeskTickets(string slug)
+        // {
+        //     throw new NotImplementedException();
+        // }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<SingleTicketVm>> GetTicket(string slug,Guid id)
@@ -28,18 +28,18 @@ namespace ServiceDesk.WebUI.Controllers
             
             return CreatedAtAction(nameof(GetTicket) ,new { id = result }, result);
         }
-
-        [HttpPatch]
-        public Task<ActionResult> UpdateTicket(string slug)
-        {
-            throw new NotImplementedException();
-        }
-
-        [HttpDelete]
-        public Task<ActionResult> DeleteTicket(string slug)
-        {
-            throw new NotImplementedException();
-        }
+        //
+        // [HttpPatch]
+        // public Task<ActionResult> UpdateTicket(string slug)
+        // {
+        //     throw new NotImplementedException();
+        // }
+        //
+        // [HttpDelete]
+        // public Task<ActionResult> DeleteTicket(string slug)
+        // {
+        //     throw new NotImplementedException();
+        // }
 
     }
 

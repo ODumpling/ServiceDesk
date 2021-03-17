@@ -32,16 +32,16 @@ namespace ServiceDesk.WebUI.Controllers
             return CreatedAtAction(nameof(GetDesk), new {slug = command.Slug}, result);
         }
 
-        [HttpPatch]
-        public Task<ActionResult> UpdateDesk()
-        {
-            throw new NotImplementedException();
-        }
+        // [HttpPut]
+        // public Task<ActionResult> UpdateDesk()
+        // {
+        //     throw new NotImplementedException();
+        // }
 
-        [HttpDelete]
-        public Task<ActionResult> DeleteDesk()
-        {
-            throw new NotImplementedException();
-        }
+        // [HttpDelete]
+        // public Task<ActionResult> DeleteDesk()
+        // {
+        //     throw new NotImplementedException();
+        // }
     }
 }

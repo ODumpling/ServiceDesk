@@ -7,17 +7,17 @@ namespace ServiceDesk.WebUI.Controllers
 {
     public class IssuesController : ApiControllerBase
     {
-        [HttpGet]
-        public Task<ActionResult> ListIssues()
-        {
-            throw new NotImplementedException();
-        }
+        // [HttpGet]
+        // public Task<ActionResult> ListIssues()
+        // {
+        //     throw new NotImplementedException();
+        // }
 
-        [HttpGet("{id}")]
-        public Task<ActionResult> GetIssue()
-        {
-            throw new NotImplementedException();
-        }
+        // [HttpGet("{id}")]
+        // public Task<ActionResult> GetIssue()
+        // {
+        //     throw new NotImplementedException();
+        // }
 
         [HttpPost]
         public async Task<ActionResult<Guid>> CreateIssue(string slug,CreateIssueCommand command)
@@ -28,17 +28,17 @@ namespace ServiceDesk.WebUI.Controllers
             }
             return await Mediator.Send(command);
         }
-
-        [HttpPatch]
-        public Task<ActionResult> UpdateIssue()
-        {
-            throw new NotImplementedException();
-        }
-
-        [HttpDelete]
-        public Task<ActionResult> DeleteIssue()
-        {
-            throw new NotImplementedException();
-        }
+        
+        // [HttpPatch]
+        // public Task<ActionResult> UpdateIssue()
+        // {
+        //     throw new NotImplementedException();
+        // }
+        //
+        // [HttpDelete]
+        // public Task<ActionResult> DeleteIssue()
+        // {
+        //     throw new NotImplementedException();
+        // }
     }
 }

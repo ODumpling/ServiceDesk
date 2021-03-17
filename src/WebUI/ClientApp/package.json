@@ -1,11 +1,11 @@
 {
-  "name": "servicedesk.webui",
+  "name": "servicedesk",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "echo Starting... && ng serve",
     "build": "ng build",
-    "build:ssr": "ng run ServiceDesk.WebUI:server:dev",
+    "build:ssr": "ng run servicedesk:server:dev",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -36,6 +36,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "^11.1.1",
     "@angular-devkit/build-angular": "^0.1001.0",
     "@angular/cli": "10.1.0",
     "@angular/compiler-cli": "10.1.0",
@@ -44,6 +45,7 @@
     "@types/jasminewd2": "~2.0.6",
     "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
+    "dotenv": "^8.2.0",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.0.0",
@@ -51,6 +53,8 @@
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "postcss": "^8.2.8",
+    "tailwindcss": "^2.0.3",
     "typescript": "4.0.2"
   },
   "optionalDependencies": {
