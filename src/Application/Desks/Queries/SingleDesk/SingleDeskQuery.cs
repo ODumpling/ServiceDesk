@@ -34,6 +34,7 @@ namespace ServiceDesk.Application.Desks.Queries.SingleDesk
                      Desk = await _context.Desks
                          .Where(x => x.Slug == request.Slug)
                          .Include(x => x.Tickets.Where(x => x.CreatedBy == userId))
+                         .Include(x => x.Issues)
                          .ProjectTo<SingleDeskVm.DeskDto>(_mapper.ConfigurationProvider)
                          .SingleOrDefaultAsync(cancellationToken)
 

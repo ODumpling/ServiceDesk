@@ -2,17 +2,20 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ServiceDesk.Application.Common.Models;
 using ServiceDesk.Application.Desks.Commands;
+using ServiceDesk.Application.Desks.Queries.PaginatedDeskList;
 using ServiceDesk.Application.Desks.Queries.SingleDesk;
 
 namespace ServiceDesk.WebUI.Controllers
 {
+    [Route("api/[controller]")]
     public class DesksController : ApiControllerBase
     {
         [HttpGet]
-        public Task<ActionResult> ListDesks()
+        public async Task <ActionResult<PaginatedList<PaginatedListDeskDto>>> ListDesks([FromQuery] PaginatedDeskListQuery query)
         {
-            throw new NotImplementedException();
+            return await Mediator.Send(query);
         }
 
         [HttpGet("{slug}")]

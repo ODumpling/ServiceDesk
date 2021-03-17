@@ -6,22 +6,23 @@ using ServiceDesk.Application.Tickets.Queries.SingleTicket;
 
 namespace ServiceDesk.WebUI.Controllers
 {
+    
     public class TicketsController : ApiControllerBase
     {
         [HttpGet]
-        public Task<ActionResult> ListTickets()
+        public Task<ActionResult> ListDeskTickets(string slug)
         {
             throw new NotImplementedException();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<SingleTicketVm>> GetTicket(Guid id)
+        public async Task<ActionResult<SingleTicketVm>> GetTicket(string slug,Guid id)
         {
             return await Mediator.Send(new SingleTicketQuery {Id = id});
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateTicket(CreateTicketCommand command)
+        public async Task<ActionResult> CreateTicket(string slug,CreateTicketCommand command)
         {
             var result = await Mediator.Send(command);
             
@@ -29,13 +30,13 @@ namespace ServiceDesk.WebUI.Controllers
         }
 
         [HttpPatch]
-        public Task<ActionResult> UpdateTicket()
+        public Task<ActionResult> UpdateTicket(string slug)
         {
             throw new NotImplementedException();
         }
 
         [HttpDelete]
-        public Task<ActionResult> DeleteTicket()
+        public Task<ActionResult> DeleteTicket(string slug)
         {
             throw new NotImplementedException();
         }

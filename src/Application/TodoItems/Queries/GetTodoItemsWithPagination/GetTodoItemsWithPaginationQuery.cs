@@ -35,7 +35,7 @@ namespace ServiceDesk.Application.TodoItems.Queries.GetTodoItemsWithPagination
                 .Where(x => x.ListId == request.ListId)
                 .OrderBy(x => x.Title)
                 .ProjectTo<TodoItemDto>(_mapper.ConfigurationProvider)
-                .PaginatedListAsync(request.PageNumber, request.PageSize); ;
+                .ToPaginatedListAsync(request.PageNumber, request.PageSize); ;
         }
     }
 }

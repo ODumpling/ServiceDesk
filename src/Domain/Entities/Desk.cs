@@ -12,6 +12,7 @@ namespace ServiceDesk.Domain.Entities
         public string Description { get; set; }
         public string Manager { get; set; }
         public IList<Ticket> Tickets { get; set; } = new List<Ticket>();
+        public IList<Issue> Issues { get; set; } = new List<Issue>();
 
         public static Desk Create(string slug, string name, string description, string manager)
         {

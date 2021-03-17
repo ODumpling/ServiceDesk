@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace ServiceDesk.WebUI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/Desk/{slug}/[controller]")]
     public abstract class ApiControllerBase : ControllerBase
     {
         private ISender _mediator;

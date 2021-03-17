@@ -17,6 +17,7 @@ namespace ServiceDesk.Application.Desks.Queries.SingleDesk
             public string Description { get; set; }
             public string Manager { get; set; }
             public IList<TicketDto> Tickets { get; set; }
+            public IList<IssueDto> Issues { get; set; }
 
         }
 
@@ -26,5 +27,11 @@ namespace ServiceDesk.Application.Desks.Queries.SingleDesk
             public string Description { get; set; }
             public string Issue { get; set; }
         }
+    }
+
+    public class IssueDto : IMapFrom<Issue>
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
     }
 }

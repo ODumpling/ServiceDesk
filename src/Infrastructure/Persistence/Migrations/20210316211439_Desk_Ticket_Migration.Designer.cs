@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServiceDesk.Infrastructure.Persistence;
 
 namespace ServiceDesk.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210316211439_Desk_Ticket_Migration")]
+    partial class Desk_Ticket_Migration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -292,25 +294,6 @@ namespace ServiceDesk.Infrastructure.Persistence.Migrations
                     b.ToTable("Desks");
                 });
 
-            modelBuilder.Entity("ServiceDesk.Domain.Entities.Issue", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("DeskId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeskId");
-
-                    b.ToTable("Issues");
-                });
-
             modelBuilder.Entity("ServiceDesk.Domain.Entities.Ticket", b =>
                 {
                     b.Property<Guid>("Id")
@@ -536,13 +519,6 @@ namespace ServiceDesk.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ServiceDesk.Domain.Entities.Issue", b =>
-                {
-                    b.HasOne("ServiceDesk.Domain.Entities.Desk", null)
-                        .WithMany("Issues")
-                        .HasForeignKey("DeskId");
-                });
-
             modelBuilder.Entity("ServiceDesk.Domain.Entities.Ticket", b =>
                 {
                     b.HasOne("ServiceDesk.Domain.Entities.Desk", "Desk")
@@ -590,8 +566,6 @@ namespace ServiceDesk.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ServiceDesk.Domain.Entities.Desk", b =>
                 {
-                    b.Navigation("Issues");
-
                     b.Navigation("Tickets");
                 });
 
