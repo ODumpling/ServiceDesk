@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
-import { Transition } from '@headlessui/react'
+import {Link, NavLink} from "react-router-dom";
+import {Transition} from '@headlessui/react'
 import authService from "./AuthorizeService";
 import {ApplicationPaths} from "./ApiAuthorizationConstants";
 
@@ -10,8 +10,8 @@ interface IUserState {
 }
 
 export default function Menu() {
-    const [isProfileMenuOpen,setIsProfileMenuOpen] = useState<boolean>(false)
-    const [user , setUser] = useState<IUserState>({username:null, isAuthenticated:false})
+    const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false)
+    const [user, setUser] = useState<IUserState>({username: null, isAuthenticated: false})
 
     useEffect(() => {
         const subscription = authService.subscribe(() => populateState());
@@ -20,7 +20,7 @@ export default function Menu() {
         return () => {
             authService.unsubscribe(subscription);
         }
-    },[])
+    }, [])
 
     async function populateState() {
         const [isAuthenticated, user] = await Promise.all([authService.isAuthenticated(), authService.getUser()])
@@ -30,7 +30,7 @@ export default function Menu() {
         });
     }
 
-    const logoutPath = { pathname: `${ApplicationPaths.LogOut}`, state: { local: true } };
+    const logoutPath = {pathname: `${ApplicationPaths.LogOut}`, state: {local: true}};
 
     return (
         <header className="bg-white shadow mb-8">
@@ -112,7 +112,7 @@ export default function Menu() {
                         <div className="flex-shrink-0 relative ml-4">
                             <div>
                                 <button type="button"
-                                        onClick={ () => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                                        onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
                                         className="bg-white rounded-full flex focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                         id="user-menu" aria-expanded="false" aria-haspopup="true">
                                     <span className="sr-only">Open user menu</span>
@@ -139,43 +139,48 @@ export default function Menu() {
                                 leave="transition ease-in duration-75"
                                 leaveFrom="transform opacity-100 scale-100"
                                 leaveTo="transform opacity-0 scale-95">
-                            <div
-                                className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 focus:outline-none"
-                                role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
-                                <Link to="#" className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100"
-                                      role="menuitem">{user.username ?? "Unauthenticated User"}</Link>
+                                <div
+                                    className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 focus:outline-none"
+                                    role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
+                                    <Link to="#" className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100"
+                                          role="menuitem">{user.username ?? "Unauthenticated User"}</Link>
 
-                                <Link to="#" className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100"
-                                      role="menuitem">Settings</Link>
+                                    <Link to="#" className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100"
+                                          role="menuitem">Settings</Link>
 
-                                <Link to={logoutPath} className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100"
-                                      role="menuitem">Sign out</Link>
-                            </div>
+                                    <Link to={logoutPath}
+                                          className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100"
+                                          role="menuitem">Sign out</Link>
+                                </div>
                             </Transition>
                         </div>
                     </div>
                 </div>
                 <nav className="hidden lg:py-2 lg:flex lg:space-x-8" aria-label="Global">
                     {/*// <!-- Current: "bg-gray-100 text-gray-900", Default: "text-gray-900 hover:bg-gray-50 hover:text-gray-900" -->*/}
-                    <Link to="#"
-                          className="bg-gray-100 text-gray-900 rounded-md py-2 px-3 inline-flex items-center text-sm font-medium">
+                    <NavLink to="/dashboard"
+                             activeClassName="bg-gray-100 text-gray-900"
+                             className="text-gray-900 hover:bg-gray-50 hover:text-gray-900 rounded-md py-2 px-3 inline-flex items-center text-sm font-medium">
                         Dashboard
-                    </Link>
+                    </NavLink>
 
-                    <Link to="#"
-                          className="text-gray-900 hover:bg-gray-50 hover:text-gray-900 rounded-md py-2 px-3 inline-flex items-center text-sm font-medium">
-                        Team
-                    </Link>
+                    <NavLink to="/tickets"
+                             activeClassName="bg-gray-100 text-gray-900"
+                             className="text-gray-900 hover:bg-gray-50 hover:text-gray-900 rounded-md py-2 px-3 inline-flex items-center text-sm font-medium">
+                        Tickets
+                    </NavLink>
 
-                    <Link to="#"
-                          className="text-gray-900 hover:bg-gray-50 hover:text-gray-900 rounded-md py-2 px-3 inline-flex items-center text-sm font-medium">
-                        Projects
-                    </Link>
+                    <NavLink to="/assets"
+                             activeClassName="bg-gray-100 text-gray-900"
+                             className="text-gray-900 hover:bg-gray-50 hover:text-gray-900 rounded-md py-2 px-3 inline-flex items-center text-sm font-medium">
+                        My Assets
+                    </NavLink>
 
-                    <Link to="#"
-                          className="text-gray-900 hover:bg-gray-50 hover:text-gray-900 rounded-md py-2 px-3 inline-flex items-center text-sm font-medium">
-                        Calendar
-                    </Link>
+                    <NavLink to="/solutions"
+                             activeClassName="bg-gray-100 text-gray-900"
+                             className="text-gray-900 hover:bg-gray-50 hover:text-gray-900 rounded-md py-2 px-3 inline-flex items-center text-sm font-medium">
+                        Solutions
+                    </NavLink>
                 </nav>
             </div>
 
@@ -183,17 +188,21 @@ export default function Menu() {
             <nav className="lg:hidden" aria-label="Global" id="mobile-menu">
                 <div className="pt-2 pb-3 px-2 space-y-1">
                     {/*// <!-- Current: "bg-gray-100 text-gray-900", Default: "text-gray-900 hover:bg-gray-50 hover:text-gray-900" -->*/}
-                    <Link to="#"
-                          className="bg-gray-100 text-gray-900 block rounded-md py-2 px-3 text-base font-medium">Dashboard</Link>
+                    <NavLink to="/dashboard"
+                             activeClassName="bg-gray-100 text-gray-900"
+                             className="text-gray-900 hover:bg-gray-50 hover:text-gray-900 block rounded-md py-2 px-3 text-base font-medium">Dashboard</NavLink>
 
-                    <Link to="#"
-                          className="text-gray-900 hover:bg-gray-50 hover:text-gray-900 block rounded-md py-2 px-3 text-base font-medium">Team</Link>
+                    <NavLink to="/tickets"
+                             activeClassName="bg-gray-100 text-gray-900"
+                             className="text-gray-900 hover:bg-gray-50 hover:text-gray-900 block rounded-md py-2 px-3 text-base font-medium">Tickets</NavLink>
 
-                    <Link to="#"
-                          className="text-gray-900 hover:bg-gray-50 hover:text-gray-900 block rounded-md py-2 px-3 text-base font-medium">Projects</Link>
+                    <NavLink to="/assets"
+                             activeClassName="bg-gray-100 text-gray-900"
+                             className="text-gray-900 hover:bg-gray-50 hover:text-gray-900 block rounded-md py-2 px-3 text-base font-medium">Assets</NavLink>
 
-                    <Link to="#"
-                          className="text-gray-900 hover:bg-gray-50 hover:text-gray-900 block rounded-md py-2 px-3 text-base font-medium">Calendar</Link>
+                    <NavLink to="/solutions"
+                             activeClassName="bg-gray-100 text-gray-900"
+                             className="text-gray-900 hover:bg-gray-50 hover:text-gray-900 block rounded-md py-2 px-3 text-base font-medium">Solutions</NavLink>
                 </div>
                 <div className="border-t border-gray-200 pt-4 pb-3">
                     <div className="px-4 flex items-center">
@@ -219,8 +228,7 @@ export default function Menu() {
                     </div>
                     <div className="mt-3 px-2 space-y-1">
                         <Link to="#"
-                              className="block rounded-md py-2 px-3 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900">Your
-                            Profile</Link>
+                              className="block rounded-md py-2 px-3 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900">{user.username}</Link>
 
                         <Link to="#"
                               className="block rounded-md py-2 px-3 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900">Settings</Link>

@@ -1,6 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import {DesksClient, PaginatedListDeskDto} from "../api/web-client";
-import axios, {AxiosInstance} from "axios";
+import React, {useState} from 'react';
 
 interface ICounter {
     currentCount: number

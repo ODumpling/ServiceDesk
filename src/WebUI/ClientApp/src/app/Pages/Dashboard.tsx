@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {DesksClient, PaginatedListDeskDto} from "../api/web-client";
 import axios, {AxiosInstance} from "axios";
+import { Link } from "react-router-dom";
 
 interface IDeskTile {
     desk: PaginatedListDeskDto
@@ -22,10 +23,10 @@ function DeskTile(props : IDeskTile) {
             </div>
             <div className="mt-8">
                 <h3 className="text-lg font-medium">
-                    <a href="#" className="focus:outline-none">
+                    <Link to={'/desk/' + desk.slug } className="focus:outline-none">
                         <span className="absolute inset-0" aria-hidden="true"/>
                         {desk.name}
-                    </a>
+                    </Link>
                 </h3>
                 <p className="mt-2 text-sm text-gray-500">
                     {desk.description ?? "No Description"}
@@ -59,7 +60,7 @@ export default function Dashboard() {
                 <h2 className="sr-only" id="quick-links-title">Quick links</h2>
                 {desks.items?.map((desk) => (
                     <DeskTile desk={desk}/>
-                ))}
+                )) ?? "No Desks Available"}
             </div>
         </section>
     )
