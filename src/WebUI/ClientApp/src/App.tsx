@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './app/components/Layout';
-import { FetchData } from './app/components/FetchData';
-import Counter  from './app/components/Counter';
+import { FetchData } from './app/Pages/FetchData';
+import Counter  from './app/Pages/Counter';
 import AuthorizeRoute from './app/components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './app/components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './app/components/api-authorization/ApiAuthorizationConstants';

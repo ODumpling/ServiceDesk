@@ -9,13 +9,7 @@ interface ICounter {
 
 export default function Counter() {
     const [counter, setCounter] = useState<ICounter>({currentCount: 0})
-    const [desks, setDesks] = useState< {items:PaginatedListDeskDto[] | undefined}>({items: undefined})
 
-    useEffect(() => {
-        const instance: AxiosInstance = axios.create({transformResponse: data => data});
-        const client = new DesksClient(undefined, instance);
-        client.listDesks(10, 1).then((res) => setDesks({items: res.items}))
-    }, []);
 
     function incrementCounter() {
         setCounter({
@@ -29,7 +23,6 @@ export default function Counter() {
             <h1>Counter</h1>
 
             <p>This is a simple example of a React component.</p>
-            <p>{JSON.stringify(desks.items)}</p>
 
             <p aria-live="polite">Current count: <strong>{counter.currentCount}</strong></p>
 
