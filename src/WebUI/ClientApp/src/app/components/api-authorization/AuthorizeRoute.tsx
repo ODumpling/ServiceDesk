@@ -6,12 +6,14 @@ import authService from './AuthorizeService'
 
 interface IProps {
     component: any,
-    path: any
+    path: any,
+    exact?: boolean;
 }
 
 interface IState {
     ready: boolean,
     authenticated: boolean
+
 }
 
 export default class AuthorizeRoute extends Component<IProps, IState> {

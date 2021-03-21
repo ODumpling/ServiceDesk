@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {DesksClient, PaginatedListDeskDto} from "../api/web-client";
 import axios, {AxiosInstance} from "axios";
 import { Link } from "react-router-dom";
+import {DesksClient, PaginatedListDeskDto} from "../api/web-client";
 
 interface IDeskTile {
     desk: PaginatedListDeskDto
@@ -44,7 +44,6 @@ function DeskTile(props : IDeskTile) {
 }
 
 export default function Dashboard() {
-
     const [desks, setDesks] = useState< {items:PaginatedListDeskDto[] | undefined}>({items: undefined})
 
     useEffect(() => {
@@ -59,7 +58,7 @@ export default function Dashboard() {
                 className="rounded-lg overflow-hidden shadow-2xl divide-y divide-gray-200 sm:divide-y-0 sm:grid sm:grid-cols-2 sm:gap-px">
                 <h2 className="sr-only" id="quick-links-title">Quick links</h2>
                 {desks.items?.map((desk) => (
-                    <DeskTile desk={desk}/>
+                    <DeskTile key={desk.id} desk={desk}/>
                 )) ?? "No Desks Available"}
             </div>
         </section>

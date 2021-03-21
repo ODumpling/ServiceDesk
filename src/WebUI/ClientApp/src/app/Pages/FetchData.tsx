@@ -17,7 +17,7 @@ interface IForecast {
     summary: any
 }
 
-export class FetchData extends Component<IProps, IState> {
+export default class FetchData extends Component<IProps, IState> {
     static displayName = FetchData.name;
 
     constructor(props: IProps) {

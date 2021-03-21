@@ -251,14 +251,19 @@ export class TicketsClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    getTicket(slug: string | null, id: string , cancelToken?: CancelToken | undefined): Promise<SingleTicketVm> {
-        let url_ = this.baseUrl + "/api/Desk/{slug}/Tickets/{id}";
+    listDeskTickets(slug: string | null, page: number | undefined, size: number | undefined , cancelToken?: CancelToken | undefined): Promise<PaginatedListOfUserTicketDto> {
+        let url_ = this.baseUrl + "/api/Desk/{slug}/Tickets?";
         if (slug === undefined || slug === null)
             throw new Error("The parameter 'slug' must be defined.");
         url_ = url_.replace("{slug}", encodeURIComponent("" + slug));
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (size === null)
+            throw new Error("The parameter 'size' cannot be null.");
+        else if (size !== undefined)
+            url_ += "size=" + encodeURIComponent("" + size) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <AxiosRequestConfig>{
@@ -277,11 +282,11 @@ export class TicketsClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processGetTicket(_response);
+            return this.processListDeskTickets(_response);
         });
     }
 
-    protected processGetTicket(response: AxiosResponse): Promise<SingleTicketVm> {
+    protected processListDeskTickets(response: AxiosResponse): Promise<PaginatedListOfUserTicketDto> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -301,7 +306,7 @@ export class TicketsClient {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<SingleTicketVm>(<any>null);
+        return Promise.resolve<PaginatedListOfUserTicketDto>(<any>null);
     }
 
     createTicket(slug: string | null, command: CreateTicketCommand , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
@@ -356,6 +361,59 @@ export class TicketsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<FileResponse>(<any>null);
+    }
+
+    getTicket(slug: string | null, id: number , cancelToken?: CancelToken | undefined): Promise<SingleTicketVm> {
+        let url_ = this.baseUrl + "/api/Desk/{slug}/Tickets/{id}";
+        if (slug === undefined || slug === null)
+            throw new Error("The parameter 'slug' must be defined.");
+        url_ = url_.replace("{slug}", encodeURIComponent("" + slug));
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetTicket(_response);
+        });
+    }
+
+    protected processGetTicket(response: AxiosResponse): Promise<SingleTicketVm> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<SingleTicketVm>(<any>null);
     }
 }
 
@@ -958,14 +1016,7 @@ export interface DeskDto {
     name?: string | undefined;
     description?: string | undefined;
     manager?: string | undefined;
-    tickets?: TicketDto[] | undefined;
     issues?: IssueDto[] | undefined;
-}
-
-export interface TicketDto {
-    id?: string;
-    description?: string | undefined;
-    issue?: string | undefined;
 }
 
 export interface IssueDto {
@@ -985,17 +1036,34 @@ export interface CreateIssueCommand {
     slug?: string | undefined;
 }
 
-export interface SingleTicketVm {
-    ticket?: TicketDto2 | undefined;
+export interface PaginatedListOfUserTicketDto {
+    items?: UserTicketDto[] | undefined;
+    pageIndex?: number;
+    totalPages?: number;
+    totalCount?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
 }
 
-export interface TicketDto2 {
-    id?: string;
+export interface UserTicketDto {
+    id?: number;
+    description?: string | undefined;
+    issue?: string | undefined;
+    created?: Date;
+}
+
+export interface SingleTicketVm {
+    ticket?: TicketDto | undefined;
+}
+
+export interface TicketDto {
+    id?: number;
     description?: string | undefined;
     issue?: string | undefined;
 }
 
 export interface CreateTicketCommand {
+    slug?: string | undefined;
     issue?: string | undefined;
     description?: string | undefined;
 }
