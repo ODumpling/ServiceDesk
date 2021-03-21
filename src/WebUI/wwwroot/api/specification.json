@@ -154,12 +154,12 @@
         }
       }
     },
-    "/api/Desk/{slug}/Tickets/{id}": {
+    "/api/Desk/{slug}/Tickets": {
       "get": {
         "tags": [
           "Tickets"
         ],
-        "operationId": "Tickets_GetTicket",
+        "operationId": "Tickets_ListDeskTickets",
         "parameters": [
           {
             "name": "slug",
@@ -172,14 +172,22 @@
             "x-position": 1
           },
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "page",
+            "in": "query",
             "schema": {
-              "type": "string",
-              "format": "guid"
+              "type": "integer",
+              "format": "int32"
             },
             "x-position": 2
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
           }
         ],
         "responses": {
@@ -188,15 +196,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SingleTicketVm"
+                  "$ref": "#/components/schemas/PaginatedListOfUserTicketDto"
                 }
               }
             }
           }
         }
-      }
-    },
-    "/api/Desk/{slug}/Tickets": {
+      },
       "post": {
         "tags": [
           "Tickets"
@@ -234,6 +240,48 @@
                 "schema": {
                   "type": "string",
                   "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Desk/{slug}/Tickets/{id}": {
+      "get": {
+        "tags": [
+          "Tickets"
+        ],
+        "operationId": "Tickets_GetTicket",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SingleTicketVm"
                 }
               }
             }
@@ -839,37 +887,12 @@
             "type": "string",
             "nullable": true
           },
-          "tickets": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/TicketDto"
-            }
-          },
           "issues": {
             "type": "array",
             "nullable": true,
             "items": {
               "$ref": "#/components/schemas/IssueDto"
             }
-          }
-        }
-      },
-      "TicketDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "issue": {
-            "type": "string",
-            "nullable": true
           }
         }
       },
@@ -923,6 +946,59 @@
           }
         }
       },
+      "PaginatedListOfUserTicketDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/UserTicketDto"
+            }
+          },
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasPreviousPage": {
+            "type": "boolean"
+          },
+          "hasNextPage": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserTicketDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "issue": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "SingleTicketVm": {
         "type": "object",
         "additionalProperties": false,
@@ -931,19 +1007,19 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/TicketDto2"
+                "$ref": "#/components/schemas/TicketDto"
               }
             ]
           }
         }
       },
-      "TicketDto2": {
+      "TicketDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "id": {
-            "type": "string",
-            "format": "guid"
+            "type": "integer",
+            "format": "int32"
           },
           "description": {
             "type": "string",
@@ -959,6 +1035,10 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
           "issue": {
             "type": "string",
             "nullable": true

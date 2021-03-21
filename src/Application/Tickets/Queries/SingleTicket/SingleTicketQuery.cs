@@ -14,7 +14,7 @@ namespace ServiceDesk.Application.Tickets.Queries.SingleTicket
     [Authorize]
     public class SingleTicketQuery : IRequest<SingleTicketVm>
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public class QueryHandler : IRequestHandler<SingleTicketQuery, SingleTicketVm>
         {

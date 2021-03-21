@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ServiceDesk.Application.Common.Mappings;
+using ServiceDesk.Application.Common.Models;
 using ServiceDesk.Domain.Entities;
 
 namespace ServiceDesk.Application.Desks.Queries.SingleDesk
@@ -16,22 +17,17 @@ namespace ServiceDesk.Application.Desks.Queries.SingleDesk
             public string Name { get; set; }
             public string Description { get; set; }
             public string Manager { get; set; }
-            public IList<TicketDto> Tickets { get; set; }
             public IList<IssueDto> Issues { get; set; }
 
         }
 
-        public class TicketDto : IMapFrom<Ticket>
+        public class IssueDto : IMapFrom<Issue>
         {
             public Guid Id { get; set; }
-            public string Description { get; set; }
-            public string Issue { get; set; }
+            public string Name { get; set; }
         }
+     
     }
 
-    public class IssueDto : IMapFrom<Issue>
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-    }
+    
 }

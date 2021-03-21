@@ -5,7 +5,7 @@ namespace ServiceDesk.Domain.Entities
 {
     public class Ticket : AuditableEntity
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Description { get; set; }
         public string Issue { get; set; }
         public Guid DeskId { get; set; }

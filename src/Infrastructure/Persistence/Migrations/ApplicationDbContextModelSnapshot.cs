@@ -313,9 +313,10 @@ namespace ServiceDesk.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ServiceDesk.Domain.Entities.Ticket", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
