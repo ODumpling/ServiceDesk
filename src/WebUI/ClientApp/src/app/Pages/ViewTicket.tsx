@@ -15,7 +15,7 @@ export default function ViewTicket() {
     async function getTicketInfo(deskslug: string, ticketId: number) {
         console.log(deskslug)
         console.log(ticketId)
-        const client = new TicketsClient(undefined, await API.authorizedInstance());
+        const client = new TicketsClient(undefined, await API.instance());
         client.getTicket(deskslug, ticketId).then((data) => setTicket(data.ticket))
     }
 

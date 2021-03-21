@@ -1,5 +1,4 @@
 import React, {Fragment, useEffect, useState} from "react";
-import axios, {AxiosInstance} from "axios";
 import {CreateTicketCommand, DeskDto, DesksClient, TicketsClient} from '../api/web-client';
 import {useParams, useHistory} from "react-router-dom";
 import {Form, Formik} from "formik"
@@ -12,17 +11,20 @@ export default function CreateTicket() {
     const path = useHistory();
 
     useEffect(() => {
-        const instance: AxiosInstance = axios.create({transformResponse: data => data});
-        const client = new DesksClient(undefined, instance);
-        client.getDesk(slug).then((data) => setDesk(data.desk))
+        getDesk(slug)
     }, [slug])
 
-    function submitTicket(command: CreateTicketCommand) {
-
-        const client = new TicketsClient(undefined, API.createdResponseInstance());
+    async function submitTicket(command: CreateTicketCommand) {
+        const instance = await API.instance()
+        const client = new TicketsClient(undefined, instance);
         client.createTicket(slug, command).then((res) => path.push('/desk/' + desk?.slug))
     }
 
+    async function getDesk(slug: string) {
+        const instance = await API.instance();
+        const client = new DesksClient(undefined, instance);
+        client.getDesk(slug).then((data) => setDesk(data.desk))
+    }
 
     const formValues: CreateTicketCommand = {issue: '', description: ''}
 

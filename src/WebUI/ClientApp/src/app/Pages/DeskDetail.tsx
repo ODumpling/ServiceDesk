@@ -20,13 +20,15 @@ export default function DeskDetail() {
         getTickets(slug, page.number, page.size)
     }, [slug, page.number, page.size]);
 
-    function getDeskDetail(slug: string) {
-        const client = new DesksClient(undefined, API.transformedResponseInstance());
+    async function getDeskDetail(slug: string) {
+        const instance = await API.instance();
+        const client = new DesksClient(undefined, instance);
         client.getDesk(slug).then((data) => setDesk(data.desk))
     }
 
-    function getTickets(slug: string, page: number, size: number) {
-        const client = new TicketsClient(undefined, API.transformedResponseInstance());
+    async function getTickets(slug: string, page: number, size: number) {
+        const instance = await API.instance();
+        const client = new TicketsClient(undefined, instance);
         client.listDeskTickets(slug, page, size).then((data) => setTickets(data))
     }
 
