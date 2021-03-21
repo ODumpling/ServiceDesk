@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {CreateTicketCommand, DeskDto, DesksClient, TicketsClient} from '../api/web-client';
+import {CreateTicketCommand, DeskDto} from '../api/web-client';
 import {useParams, useHistory} from "react-router-dom";
 import {Form, Formik} from "formik"
 import {API} from "../api/api-helper";
@@ -15,14 +15,12 @@ export default function CreateTicket() {
     }, [slug])
 
     async function submitTicket(command: CreateTicketCommand) {
-        const instance = await API.instance()
-        const client = new TicketsClient(undefined, instance);
+        const client = await API.TicketClient();
         client.createTicket(slug, command).then((res) => path.push('/desk/' + desk?.slug))
     }
 
     async function getDesk(slug: string) {
-        const instance = await API.instance();
-        const client = new DesksClient(undefined, instance);
+        const client = await API.DeskClient();
         client.getDesk(slug).then((data) => setDesk(data.desk))
     }
 

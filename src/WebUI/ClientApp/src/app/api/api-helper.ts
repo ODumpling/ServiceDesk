@@ -1,8 +1,9 @@
 import axios, {AxiosInstance} from "axios";
 import authService from "../components/api-authorization/AuthorizeService";
+import {DesksClient, TicketsClient} from "./web-client";
 
 
-export const API = {
+export class apiHelper {
     async instance(): Promise<AxiosInstance> {
         const instance = axios.create({transformResponse: data => data})
         const token = await authService.getAccessToken();
@@ -20,4 +21,16 @@ export const API = {
         });
         return instance
     }
+
+    async DeskClient(){
+        const instance = await this.instance();
+        return new DesksClient(undefined, instance);
+    }
+
+    async TicketClient(){
+        const instance = await this.instance();
+        return new TicketsClient(undefined, instance);
+    }
 }
+
+export const API = new apiHelper();
