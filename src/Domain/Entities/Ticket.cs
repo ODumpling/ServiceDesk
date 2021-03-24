@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ServiceDesk.Domain.Common;
 
 namespace ServiceDesk.Domain.Entities
@@ -10,7 +11,7 @@ namespace ServiceDesk.Domain.Entities
         public string Issue { get; set; }
         public Guid DeskId { get; set; }
         public Desk Desk { get; set; }
-
+        public IList<Comment> Comments { get; set; } = new List<Comment>();
         public static Ticket Create(string description, string issue)
         {
             return new Ticket

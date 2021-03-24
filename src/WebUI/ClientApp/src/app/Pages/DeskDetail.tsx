@@ -1,36 +1,27 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {PaginatedListOfUserTicketDto, UserTicketDto} from "../api/web-client";
+
 import DeskHeader from "../components/DeskHeader";
 import TicketTableRecord from "../components/TicketTableRecord";
-import {DeskDto, DesksClient, PaginatedListOfUserTicketDto, TicketsClient, UserTicketDto} from "../api/web-client";
-import {API} from "../api/api-helper";
 import {Pagination} from "../components/Pagination";
+import {getDeskAsync, selectDesk} from "../features/desk/deskSlice";
+import {getTicketListAsync, selectTicketList} from "../features/ticket/ticketSlice";
+
 
 export default function DeskDetail() {
-
+    const dispatch = useDispatch();
     const {slug} = useParams()
-    // const query = new URLSearchParams(useLocation().search);
-
-    const [desk, setDesk] = useState<DeskDto | undefined>({})
-    const [tickets, setTickets] = useState<PaginatedListOfUserTicketDto>({items: []})
     const [page, setPage] = useState({number: 1, size: 10});
 
     useEffect(() => {
-        getDeskDetail(slug);
-        getTickets(slug, page.number, page.size)
-    }, [slug, page.number, page.size]);
+        dispatch(getDeskAsync(slug))
+        dispatch(getTicketListAsync(slug, page.number, page.size))
+    }, [dispatch, slug, page.number, page.size])
 
-    async function getDeskDetail(slug: string) {
-        const instance = await API.instance();
-        const client = new DesksClient(undefined, instance);
-        client.getDesk(slug).then((data) => setDesk(data.desk))
-    }
-
-    async function getTickets(slug: string, page: number, size: number) {
-        const instance = await API.instance();
-        const client = new TicketsClient(undefined, instance);
-        client.listDeskTickets(slug, page, size).then((data) => setTickets(data))
-    }
+    const desk = useSelector(selectDesk);
+    const tickets = useSelector(selectTicketList)
 
     function displayTickets(items: UserTicketDto[], slug: string) {
         if (items.length > 0) {

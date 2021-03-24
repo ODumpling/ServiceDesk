@@ -89,7 +89,7 @@ export default function Menu() {
 
     useEffect(() =>{
         function handleOutsideClick(event: MouseEvent) {
-            if (!container.current.contains(event.target as Node)) {
+            if (container.current?.contains(event.target as Node)) {
                 if (!isProfileMenuOpen) return;
                 setIsProfileMenuOpen(false);
             }

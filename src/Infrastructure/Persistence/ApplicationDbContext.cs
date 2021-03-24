@@ -31,6 +31,7 @@ namespace ServiceDesk.Infrastructure.Persistence
             _dateTime = dateTime;
         }
 
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<Desk> Desks { get; set; }
         public DbSet<Issue> Issues { get; set; }
         public DbSet<Ticket> Tickets { get; set; }

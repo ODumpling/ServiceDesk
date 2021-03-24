@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using System.Linq;
+using ServiceDesk.WebUI.Hubs;
 
 namespace ServiceDesk.WebUI
 {
@@ -47,6 +48,7 @@ namespace ServiceDesk.WebUI
                     .AddFluentValidation();
 
             services.AddRazorPages();
+            services.AddSignalR();
 
             // Customise default API behaviour
             services.Configure<ApiBehaviorOptions>(options =>
@@ -115,6 +117,7 @@ namespace ServiceDesk.WebUI
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<CommentHub>("/hub");
             });
 
             app.UseSpa(spa =>

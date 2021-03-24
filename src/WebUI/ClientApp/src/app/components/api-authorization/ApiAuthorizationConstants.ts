@@ -1,5 +1,5 @@
 export const ApplicationName = 'ServiceDesk';
-export const ApiName = 'ServiceDesk.WebUI';
+export const ApiName = 'ServiceDesk';
 
 export const QueryParameterNames = {
   ReturnUrl: 'returnUrl',

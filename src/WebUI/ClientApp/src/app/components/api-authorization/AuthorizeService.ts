@@ -91,6 +91,15 @@ export class AuthorizeService {
         }
     }
 
+    async silentRenew() {
+        try {
+            await this.ensureUserManagerInitialized();
+            await this.userManager.signinSilent();
+        } catch (e) {
+            console.log('Silent renew could not be done.', e)
+        }
+    }
+
     // We try to sign out the user in two different ways:
     // 1) We try to do a sign-out using a PopUp Window. This might fail if there is a
     //    Pop-Up blocker or the user has disabled PopUps.
@@ -142,9 +151,7 @@ export class AuthorizeService {
     }
 
     unsubscribe(subscriptionId: any) {
-        const subscriptionIndex: Array<any> = this._callbacks
-            .map((element, index) => element.subscription === subscriptionId ? {found: true, index} : {found: false})
-            .filter(element => element.found);
+        const subscriptionIndex: Array<any> = this._callbacks.map((element, index) => element.subscription === subscriptionId ? {found: true, index} : {found: false}).filter(element => element.found);
         if (subscriptionIndex.length !== 1) {
             throw new Error(`Found an invalid number of subscriptions ${subscriptionIndex.length}`);
         }
@@ -211,6 +218,6 @@ export default authService;
 
 export const AuthenticationResultStatus = {
     Redirect: 'redirect',
-    Success: 'success',
-    Fail: 'fail'
+    Success : 'success',
+    Fail    : 'fail'
 };

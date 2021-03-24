@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace ServiceDesk.Application.Common.Behaviours
 {
@@ -14,13 +15,16 @@ namespace ServiceDesk.Application.Common.Behaviours
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IIdentityService _identityService;
+        private readonly ILogger<AuthorizationBehaviour<TRequest, TResponse>> _logger;
 
         public AuthorizationBehaviour(
             ICurrentUserService currentUserService,
-            IIdentityService identityService)
+            IIdentityService identityService,
+            ILogger<AuthorizationBehaviour<TRequest, TResponse>> logger)
         {
             _currentUserService = currentUserService;
             _identityService = identityService;
+            _logger = logger;
         }
 
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
@@ -29,6 +33,7 @@ namespace ServiceDesk.Application.Common.Behaviours
 
             if (authorizeAttributes.Any())
             {
+                _logger.LogDebug("User with id:{Id} has gone through auth",_currentUserService.UserId);
                 // Must be authenticated user
                 if (_currentUserService.UserId == null)
                 {

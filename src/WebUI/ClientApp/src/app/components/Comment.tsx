@@ -1,9 +1,12 @@
 import {Link} from "react-router-dom";
 import React from "react";
+import {CommentDto} from "../api/web-client";
 
 
 //TODO:: Make Dynamic
-export function Comment(props: {username?:string, description?:string, date?:string }) {
+export function Comment(props: { comment: CommentDto }) {
+    const {comment} = props
+
     return (
         <li>
             <div className="flex space-x-3">
@@ -18,14 +21,11 @@ export function Comment(props: {username?:string, description?:string, date?:str
                     </div>
                     <div className="mt-1 text-sm text-gray-700">
                         <p>
-                            Ducimus quas delectus ad maxime totam doloribus reiciendis ex.
-                            Tempore dolorem maiores. Similique voluptatibus tempore non ut.
-                            Ducimus quas delectus ad maxime totam doloribus reiciendis ex.
-                            Tempore dolorem maiores. Similique voluptatibus tempore non ut.
+                            {comment.description}
                         </p>
                     </div>
                     <div className="mt-2 text-sm space-x-2">
-                        <span className="text-gray-500 font-medium">4d ago</span>
+                        <span className="text-gray-500 font-medium">{comment.created}</span>
                     </div>
                 </div>
             </div>

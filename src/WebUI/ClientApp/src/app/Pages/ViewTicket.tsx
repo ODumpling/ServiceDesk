@@ -1,34 +1,52 @@
-import React, {Fragment, useEffect, useState} from "react";
+import React, {Fragment, useEffect} from "react";
+
+import {getTicketAsync, selectComments, selectTicket, addComment} from "../features/ticket/ticketSlice";
 import {useParams} from "react-router-dom";
-import {TicketDto} from "../api/web-client";
-import {API} from "../api/api-helper";
-import {TicketInformation} from "../components/TicketInformation";
+import {useDispatch, useSelector} from "react-redux";
 import {CommentsSection} from "../components/CommentsSection";
 import {Comment} from "../components/Comment";
+import {TicketInformation} from "../components/TicketInformation";
+import {socket} from "../api/Websocket";
 
+
+//TODO:: sockets
 export default function ViewTicket() {
-    const [ticket, setTicket] = useState<TicketDto | undefined>({});
 
-    const {slug, ticketId} = useParams();
+    const dispatch = useDispatch()
+    const ticket = useSelector(selectTicket);
+    const comments = useSelector(selectComments);
+
+    const {slug, ticketId} = useParams()
+    useEffect(() => {
+        dispatch(getTicketAsync(slug, ticketId))
+
+    }, [dispatch, slug, ticketId])
 
     useEffect(() => {
-        getTicketInfo(slug, ticketId)
-    }, [slug, ticketId]);
+        socket.listen("ReceiveComment", (comment) => {
+            console.log("=====Socket-Listen=====")
+            console.log(comment)
+            dispatch(addComment(comment));
+            console.log("==========")
+        });
+        return () =>{
+            socket.closeConnection();
+        }
+    },[dispatch]);
 
-    async function getTicketInfo(deskslug: string, ticketId: number) {
-        const client = await API.TicketClient();
-        client.getTicket(deskslug, ticketId).then((data) => setTicket(data.ticket))
-    }
+
 
     return (
         <Fragment>
-            <TicketInformation ticket={ticket!}/>
+            <TicketInformation ticket={ticket}/>
 
-            <CommentsSection title="Comments">
-                <Comment username="Jane Doe"/>
-                <Comment/>
+            <CommentsSection title="Comments" callback={(command) => {
+                socket.send("SendComment", command.ticketId, command.description)
+
+            }}>
+                {comments!.map((comment) => <Comment key={comment.id} comment={comment}/>)}
             </CommentsSection>
-
         </Fragment>
     );
+
 }
