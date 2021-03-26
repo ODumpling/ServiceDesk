@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {CommentDto, PaginatedListOfUserTicketDto, TicketDto} from "../../api/web-client";
+import {CommentDto, CreateComment, PaginatedListOfUserTicketDto, TicketDto} from "../../api/web-client";
 import {AppThunk, RootState} from "../../store/store";
 import {API} from "../../api/api-helper";
 
@@ -30,14 +30,18 @@ export const ticketSlice = createSlice({
     initialState,
     reducers: {
         setTicket : (state, action: PayloadAction<TicketDto>) => {
-            state.selectedTicket = action.payload
+            const ticket = action.payload;
+            ticket.comments!.sort((a, b) => {
+                return new Date(b.created!).getTime() - new Date(a.created!).getTime()
+            })
+            state.selectedTicket = ticket;
         },
         setList   : (state, action: PayloadAction<PaginatedListOfUserTicketDto>) => {
             state.ticketList = action.payload
         },
         addComment: (state, action: PayloadAction<CommentDto>) => {
             state.selectedTicket.comments = [...state.selectedTicket.comments!, action.payload]
-        }
+        },
     }
 })
 
@@ -53,9 +57,13 @@ export const getTicketListAsync = (slug: string, page: number, size: number): Ap
     client.listDeskTickets(slug, page, size).then((data) => dispatch(setList(data))).catch(error => console.error(error.status))
 };
 
+export const addCommentAsync = (slug: string, command: CreateComment): AppThunk => async dispatch => {
+    const client = await API.CommentClient();
+    client.createComment(slug, command).then((res) => dispatch(getTicketAsync(slug, command.ticketId!)))
+}
+
 
 export const selectTicket = (state: RootState) => state.tickets.selectedTicket
 export const selectTicketList = (state: RootState) => state.tickets.ticketList
-export const selectComments = (state: RootState) => state.tickets.selectedTicket.comments
 
 export default ticketSlice.reducer
