@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using ServiceDesk.Application.Common.Mappings;
-using ServiceDesk.Application.TodoLists.Queries.GetTodos;
-using ServiceDesk.Domain.Entities;
 using NUnit.Framework;
 using System;
 using System.Runtime.Serialization;
@@ -29,15 +27,15 @@ namespace ServiceDesk.Application.UnitTests.Common.Mappings
             _configuration.AssertConfigurationIsValid();
         }
         
-        [Test]
-        [TestCase(typeof(TodoList), typeof(TodoListDto))]
-        [TestCase(typeof(TodoItem), typeof(TodoItemDto))]
-        public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)
-        {
-            var instance = GetInstanceOf(source);
-
-            _mapper.Map(instance, source, destination);
-        }
+        // [Test]
+        // [TestCase(typeof(TodoList), typeof(TodoListDto))]
+        // [TestCase(typeof(TodoItem), typeof(TodoItemDto))]
+        // public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)
+        // {
+        //     var instance = GetInstanceOf(source);
+        //
+        //     _mapper.Map(instance, source, destination);
+        // }
 
         private object GetInstanceOf(Type type)
         {
