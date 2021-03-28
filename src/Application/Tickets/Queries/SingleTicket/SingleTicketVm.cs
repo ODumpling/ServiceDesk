@@ -15,6 +15,7 @@ namespace ServiceDesk.Application.Tickets.Queries.SingleTicket
             public string Description { get; set; }
             public string Issue { get; set; }
             public IList<CommentDto> Comments {get;set;}
+            public DateTime Created { get; set; }
         }
         public class CommentDto : IMapFrom<Comment>
         {
