@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ServiceDesk.Application.Common.Interfaces;
@@ -14,6 +15,22 @@ namespace ServiceDesk.Application.Issues.Commands
         public string Name { get; set; }
 
         public string Slug { get; set; }
+
+        public class CommandValidator : AbstractValidator<CreateIssueCommand>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Name)
+                    .MinimumLength(3)
+                    .MaximumLength(20)
+                    .NotEmpty();
+
+                RuleFor(x => x.Slug)
+                    .MinimumLength(3)
+                    .MaximumLength(20)
+                    .NotEmpty();
+            }
+        }
 
         public class CommandHandler : IRequestHandler<CreateIssueCommand, Guid>
         {

@@ -15,6 +15,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Npgsql;
 
 [SetUpFixture]
 public class Testing
@@ -132,6 +133,14 @@ public class Testing
     public static async Task ResetState()
     {
         await _checkpoint.Reset(_configuration.GetConnectionString("DefaultConnection"));
+
+        // using (var conn = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+        // {
+        //     await conn.OpenAsync();
+        //     await _checkpoint.Reset(conn);
+        // }
+
+
         _currentUserId = null;
     }
 

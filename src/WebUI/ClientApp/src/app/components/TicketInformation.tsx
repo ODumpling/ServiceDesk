@@ -2,11 +2,14 @@ import {TicketDto} from "../api/web-client";
 import React from "react";
 
 export function TicketInformation(props: { ticket: TicketDto }) {
+
+    const {ticket} = props;
+
     return <section aria-labelledby="ticket-information-title">
         <div className="bg-white shadow sm:rounded-lg">
             <div className="px-4 py-5 sm:px-6">
                 <h2 id="applicant-information-title" className="text-lg leading-6 font-medium text-gray-900">
-                    Ticket #{props.ticket?.id} Information
+                    Ticket #{ticket?.id} Information
                 </h2>
                 <p className="mt-1 max-w-2xl text-sm text-gray-500">
                     Ticket details.
@@ -19,7 +22,7 @@ export function TicketInformation(props: { ticket: TicketDto }) {
                             Issue Type
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900">
-                            {props.ticket?.issue}
+                            {ticket?.issue}
                         </dd>
                     </div>
                     <div className="sm:col-span-1">
@@ -27,7 +30,7 @@ export function TicketInformation(props: { ticket: TicketDto }) {
                             Ticket Created
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900">
-                            {/* TODO : Ticket Created DateTime */}
+                            {ticket.created}
                         </dd>
                     </div>
                     <div className="sm:col-span-2">
@@ -35,7 +38,7 @@ export function TicketInformation(props: { ticket: TicketDto }) {
                             Description
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900">
-                            {props.ticket?.description}
+                            {ticket?.description}
                         </dd>
                     </div>
                 </dl>
