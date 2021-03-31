@@ -316,7 +316,7 @@ export class TicketsClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    listDeskTickets(slug: string | null, page: number | undefined, size: number | undefined , cancelToken?: CancelToken | undefined): Promise<PaginatedListOfUserTicketDto> {
+    listDeskTickets(slug: string | null, page: number | undefined, size: number | undefined , cancelToken?: CancelToken | undefined): Promise<PaginatedTicketViewModel> {
         let url_ = this.baseUrl + "/api/Desk/{slug}/Tickets?";
         if (slug === undefined || slug === null)
             throw new Error("The parameter 'slug' must be defined.");
@@ -351,7 +351,7 @@ export class TicketsClient {
         });
     }
 
-    protected processListDeskTickets(response: AxiosResponse): Promise<PaginatedListOfUserTicketDto> {
+    protected processListDeskTickets(response: AxiosResponse): Promise<PaginatedTicketViewModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -371,10 +371,10 @@ export class TicketsClient {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<PaginatedListOfUserTicketDto>(<any>null);
+        return Promise.resolve<PaginatedTicketViewModel>(<any>null);
     }
 
-    createTicket(slug: string | null, command: CreateTicketCommand , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+    createTicket(slug: string | null, command: CreateTicketCommand , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/Desk/{slug}/Tickets";
         if (slug === undefined || slug === null)
             throw new Error("The parameter 'slug' must be defined.");
@@ -385,12 +385,10 @@ export class TicketsClient {
 
         let options_ = <AxiosRequestConfig>{
             data: content_,
-            responseType: "blob",
             method: "POST",
             url: url_,
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
             },
             cancelToken
         };
@@ -406,7 +404,59 @@ export class TicketsClient {
         });
     }
 
-    protected processCreateTicket(response: AxiosResponse): Promise<FileResponse> {
+    protected processCreateTicket(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 201) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    updateTicket(slug: string | null, command: UpdateTicketStatusCommand , cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Desk/{slug}/Tickets";
+        if (slug === undefined || slug === null)
+            throw new Error("The parameter 'slug' must be defined.");
+        url_ = url_.replace("{slug}", encodeURIComponent("" + slug));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            responseType: "blob",
+            method: "PATCH",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUpdateTicket(_response);
+        });
+    }
+
+    protected processUpdateTicket(response: AxiosResponse): Promise<FileResponse> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -533,6 +583,16 @@ export interface CreateIssueCommand {
     slug?: string | undefined;
 }
 
+export interface PaginatedTicketViewModel {
+    status?: StatusDto[] | undefined;
+    list?: PaginatedListOfUserTicketDto | undefined;
+}
+
+export interface StatusDto {
+    value?: number;
+    name?: string | undefined;
+}
+
 export interface PaginatedListOfUserTicketDto {
     items?: UserTicketDto[] | undefined;
     pageIndex?: number;
@@ -546,6 +606,7 @@ export interface UserTicketDto {
     id?: number;
     description?: string | undefined;
     issue?: string | undefined;
+    status?: string | undefined;
     created?: Date;
 }
 
@@ -572,6 +633,18 @@ export interface CreateTicketCommand {
     slug?: string | undefined;
     issue?: string | undefined;
     description?: string | undefined;
+}
+
+export interface UpdateTicketStatusCommand {
+    id?: number;
+    status?: Status;
+}
+
+export enum Status {
+    Open = 0,
+    Assigned = 1,
+    Awaiting = 2,
+    Closed = 3,
 }
 
 export interface FileResponse {

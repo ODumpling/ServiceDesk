@@ -240,7 +240,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedListOfUserTicketDto"
+                  "$ref": "#/components/schemas/PaginatedTicketViewModel"
                 }
               }
             }
@@ -270,6 +270,41 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreateTicketCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Tickets"
+        ],
+        "operationId": "Tickets_UpdateTicket",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTicketStatusCommand"
               }
             }
           },
@@ -500,6 +535,41 @@
           }
         }
       },
+      "PaginatedTicketViewModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/StatusDto"
+            }
+          },
+          "list": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PaginatedListOfUserTicketDto"
+              }
+            ]
+          }
+        }
+      },
+      "StatusDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "PaginatedListOfUserTicketDto": {
         "type": "object",
         "additionalProperties": false,
@@ -544,6 +614,10 @@
             "nullable": true
           },
           "issue": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
             "type": "string",
             "nullable": true
           },
@@ -635,6 +709,35 @@
             "nullable": true
           }
         }
+      },
+      "UpdateTicketStatusCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "$ref": "#/components/schemas/Status"
+          }
+        }
+      },
+      "Status": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Open",
+          "Assigned",
+          "Awaiting",
+          "Closed"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ]
       }
     },
     "securitySchemes": {

@@ -1,10 +1,11 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {CommentDto, CreateComment, PaginatedListOfUserTicketDto, TicketDto} from "../../api/web-client";
+import {CommentDto, CreateComment, PaginatedListOfUserTicketDto, StatusDto, TicketDto} from "../../api/web-client";
 import {AppThunk, RootState} from "../../store/store";
 import {API} from "../../api/api-helper";
 
 interface ITicketStore {
-    selectedTicket: TicketDto
+    selectedTicket: TicketDto,
+    statusList: StatusDto[]
     ticketList: PaginatedListOfUserTicketDto
 }
 
@@ -22,7 +23,8 @@ const initialState: ITicketStore = {
         totalCount     : 0,
         hasPreviousPage: false,
         hasNextPage    : false
-    }
+    },
+    statusList: []
 }
 
 export const ticketSlice = createSlice({
@@ -39,13 +41,16 @@ export const ticketSlice = createSlice({
         setList   : (state, action: PayloadAction<PaginatedListOfUserTicketDto>) => {
             state.ticketList = action.payload
         },
+        setStatus : (status, action: PayloadAction<StatusDto[]>) => {
+            status.statusList = action.payload
+        },
         addComment: (state, action: PayloadAction<CommentDto>) => {
             state.selectedTicket.comments = [...state.selectedTicket.comments!, action.payload]
         },
     }
 })
 
-export const {setTicket, setList, addComment} = ticketSlice.actions
+export const {setTicket, setList, addComment, setStatus} = ticketSlice.actions
 
 export const getTicketAsync = (slug: string, id: number): AppThunk => async dispatch => {
     const client = await API.TicketClient()
@@ -54,7 +59,10 @@ export const getTicketAsync = (slug: string, id: number): AppThunk => async disp
 
 export const getTicketListAsync = (slug: string, page: number, size: number): AppThunk => async dispatch => {
     const client = await API.TicketClient()
-    client.listDeskTickets(slug, page, size).then((data) => dispatch(setList(data))).catch(error => console.error(error.status))
+    client.listDeskTickets(slug, page, size).then((data) => {
+        dispatch(setList(data.list!))
+        dispatch(setStatus(data.status!))
+    }).catch(error => console.error(error.status))
 };
 
 export const addCommentAsync = (slug: string, command: CreateComment): AppThunk => async dispatch => {
@@ -63,7 +71,8 @@ export const addCommentAsync = (slug: string, command: CreateComment): AppThunk 
 }
 
 
-export const selectTicket = (state: RootState) => state.tickets.selectedTicket
-export const selectTicketList = (state: RootState) => state.tickets.ticketList
+export const selectTicket = (state: RootState) => state.tickets.selectedTicket;
+export const selectTicketList = (state: RootState) => state.tickets.ticketList;
+export const selectStatuses = (state: RootState) => state.tickets.statusList;
 
 export default ticketSlice.reducer

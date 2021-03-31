@@ -26,7 +26,7 @@ export default function DeskDetail() {
     function displayTickets(items: UserTicketDto[], slug: string) {
         if (items.length > 0) {
             return items.map((item) => (
-                <TicketTableRecord key={item.id} ticket={item} slug={slug}/>
+                <TicketTableRecord key={item.id} ticket={item} slug={slug}  />
             ));
         }
         return (

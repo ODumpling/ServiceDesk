@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ServiceDesk.Domain.Common;
+using ServiceDesk.Domain.Enums;
 
 namespace ServiceDesk.Domain.Entities
 {
@@ -11,7 +12,9 @@ namespace ServiceDesk.Domain.Entities
         public string Issue { get; set; }
         public Guid DeskId { get; set; }
         public Desk Desk { get; set; }
+        public Status Status { get; set; } = Status.Open;
         public IList<Comment> Comments { get; set; } = new List<Comment>();
+
         public static Ticket Create(string description, string issue)
         {
             return new Ticket
@@ -19,6 +22,11 @@ namespace ServiceDesk.Domain.Entities
                 Description = description,
                 Issue = issue
             };
+        }
+
+        public void UpdateStatus(Status status)
+        {
+            Status = status;
         }
     }
 }
