@@ -7,10 +7,12 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ServiceDesk.Application.Common.Interfaces;
+using ServiceDesk.Application.Common.Security;
 using ServiceDesk.Application.Tickets.Queries.SingleTicket;
 
 namespace ServiceDesk.Application.Comments.Queries.SingleComment
 {
+    [Authorize]
     public class SingleComment : IRequest<SingleTicketVm.CommentDto>
     {
         public SingleComment(Guid id)

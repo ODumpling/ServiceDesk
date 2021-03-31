@@ -7,10 +7,12 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using ServiceDesk.Application.Common.Interfaces;
 using ServiceDesk.Application.Common.Mappings;
+using ServiceDesk.Application.Common.Security;
 using ServiceDesk.Domain.Enums;
 
 namespace ServiceDesk.Application.Tickets.Queries.PaginatedTickets
 {
+    [Authorize]
     public class PaginatedTicketsQuery : IRequest<PaginatedTicketViewModel>
     {
         public PaginatedTicketsQuery(int pageNumber, int pageSize, string slug)

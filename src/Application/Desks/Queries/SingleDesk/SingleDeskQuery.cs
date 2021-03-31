@@ -6,10 +6,12 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ServiceDesk.Application.Common.Interfaces;
+using ServiceDesk.Application.Common.Security;
 using ServiceDesk.Application.Tickets.Queries.SingleTicket;
 
 namespace ServiceDesk.Application.Desks.Queries.SingleDesk
 {
+    [Authorize]
     public class SingleDeskQuery : IRequest<SingleDeskVm>
     {
         public string Slug { get; set; }
