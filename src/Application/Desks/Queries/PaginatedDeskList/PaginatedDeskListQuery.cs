@@ -7,9 +7,11 @@ using MediatR;
 using ServiceDesk.Application.Common.Interfaces;
 using ServiceDesk.Application.Common.Mappings;
 using ServiceDesk.Application.Common.Models;
+using ServiceDesk.Application.Common.Security;
 
 namespace ServiceDesk.Application.Desks.Queries.PaginatedDeskList
 {
+    [Authorize]
     public class PaginatedDeskListQuery : IRequest<PaginatedList<PaginatedListDeskDto>>
     {
         public int PageSize { get; set; } = 10;

@@ -3,10 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using ServiceDesk.Application.Common.Interfaces;
+using ServiceDesk.Application.Common.Security;
 using ServiceDesk.Domain.Enums;
 
 namespace ServiceDesk.Application.Tickets.Commands
 {
+    [Authorize]
     public class UpdateTicketStatusCommand : IRequest<bool>
     {
         public int Id { get; set; }
