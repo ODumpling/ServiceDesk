@@ -1,9 +1,37 @@
-import {UserTicketDto} from "../api/web-client";
+import {Status, UserTicketDto} from "../api/web-client";
 import {Link} from "react-router-dom";
 import React from "react";
 
+function StatusComponent(props: { status: string, colour: string,  }) {
+    const {status, colour} = props;
+
+    return (
+        <span
+            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${colour}-100 text-${colour}-800 capitalize`}>
+            {status}
+        </span>);
+}
+
 export default function TicketTableRecord(props: { ticket: UserTicketDto | undefined, slug: string }) {
     const {ticket, slug} = props;
+
+    console.table(ticket);
+    
+    function renderStatus(status: string) {
+        switch (status) {
+            case Status.Open.toString():
+                return <StatusComponent status={Status[Status.Open]} colour={"green"}/>;
+            case Status.Assigned.toString():
+                return <StatusComponent status={Status[Status.Assigned]} colour={"yellow"}/>;
+            case Status.Awaiting.toString():
+                console.log(Status.Awaiting)
+                console.log(Status.Assigned)
+                return <StatusComponent status={Status[Status.Awaiting]} colour={"yellow"}/>;
+            default:
+                return <StatusComponent status={Status[Status.Closed]} colour={"red"}/>
+        }
+    }
+
     return (
         <tr className="bg-white">
             <td className="w-1/6 px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -27,10 +55,7 @@ export default function TicketTableRecord(props: { ticket: UserTicketDto | undef
 
             </td>
             <td className="w-1/6 px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
-                <span
-                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 capitalize">
-                          success
-                </span>
+                {renderStatus(ticket?.status!)}
             </td>
             <td className="w-1/6 px-6 py-4 text-left whitespace-nowrap text-sm text-gray-500">
                 {ticket?.created}
