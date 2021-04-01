@@ -3,7 +3,7 @@ using NUnit.Framework;
 using ServiceDesk.Application.Common.Exceptions;
 using ServiceDesk.Application.Issues.Commands;
 
-namespace ServiceDesk.Application.IntegrationTests.Issue.Commands
+namespace ServiceDesk.Application.IntegrationTests.Issues.Commands
 {
     using static Testing;
 
