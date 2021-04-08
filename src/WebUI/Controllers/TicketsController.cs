@@ -28,7 +28,7 @@ namespace ServiceDesk.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult> CreateTicket(string slug, CreateTicketCommand command)
         {
-            command.slug = slug;
+            command.Slug = slug;
             var result = await Mediator.Send(command);
             return CreatedAtAction(nameof(GetTicket), new {id = result}, result);
         }

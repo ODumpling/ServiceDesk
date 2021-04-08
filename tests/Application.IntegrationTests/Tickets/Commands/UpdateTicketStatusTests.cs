@@ -32,7 +32,7 @@ namespace ServiceDesk.Application.IntegrationTests.Tickets.Commands
 
             var commandone = new CreateTicketCommand
             {
-                slug = slug,
+                Slug = slug,
                 Issue = "One Issue",
                 Description = "three four five"
             };
