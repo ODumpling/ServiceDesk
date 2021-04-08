@@ -35,4 +35,8 @@
     <ProjectReference Include="..\..\src\WebUI\WebUI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Desks\Commands" />
+  </ItemGroup>
+
 </Project>

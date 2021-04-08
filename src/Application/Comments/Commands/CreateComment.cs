@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ServiceDesk.Application.Common.Interfaces;
@@ -13,6 +14,10 @@ namespace ServiceDesk.Application.Comments.Commands
     [Authorize]
     public class CreateComment : IRequest<Guid>
     {
+        public CreateComment()
+        {
+            
+        }
         public CreateComment(int ticketId, string description)
         {
             TicketId = ticketId;
@@ -21,6 +26,35 @@ namespace ServiceDesk.Application.Comments.Commands
 
         public int TicketId { get; set; }
         public string Description { get; set; }
+
+        public class CreateCommentValidator : AbstractValidator<CreateComment>
+        {
+            private readonly IApplicationDbContext _context;
+
+            public CreateCommentValidator(IApplicationDbContext context)
+            {
+                _context = context;
+
+                RuleFor(x => x.TicketId)
+                    .MustAsync(TicketMustExist)
+                    .NotNull();
+
+                RuleFor(x => x.Description)
+                    .NotNull()
+                    .MaximumLength(250);
+            }
+
+            public async Task<bool> TicketMustExist(CreateComment command, int ticketId,
+                CancellationToken cancellationToken)
+            {
+                var result = await _context.Tickets
+                    .Where(x => x.Id == ticketId)
+                    .SingleOrDefaultAsync(cancellationToken);
+
+                return result != null;
+            }
+        }
+
 
         public class CommandHandler : IRequestHandler<CreateComment, Guid>
         {
